@@ -59,14 +59,18 @@ class Iterable(object):
   def _get(self, path, stream=True, **kwargs):
     uri = "{uri}{path}".format(uri=self.uri, path=path)
     
-    # Add query params, including `api_key`.
-    params = { "api_key": self.api_key }
+    # Add query params
+    params = {}
     for key, value in kwargs.items():
       params[key] = value
-    uri += "?{params}".format(params=urlencode(params))
+    if params != {}:
+      uri += "?{params}".format(params=urlencode(params))
+
+    # Add Api_Key header
+    headers = {"Api_Key": self.api_key}
 
     logger.info("GET request to {uri}".format(uri=uri))
-    response = requests.get(uri, stream=stream)
+    response = requests.get(uri, stream=stream, headers=headers)
     response.raise_for_status()
     return response
 
