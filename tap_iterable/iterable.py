@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 from singer import utils
 from urllib.parse import urlencode
 import backoff
-import json
 import requests
 import logging
+import sys
 
 
 logger = logging.getLogger()
@@ -43,9 +43,12 @@ class Iterable(object):
     endDateTime = utils.strptime_with_tz(startDateTime) + timedelta(self.api_window_in_days)
     return endDateTime.strftime("%Y-%m-%d %H:%M:%S")
 
+  def fatal_code(e):
+      return 401 == e.response.status_code
 
   def retry_handler(details):
-    logger.info("Received 429 -- sleeping for %s seconds",
+    logger.info("Received %s -- sleeping for %s seconds",
+                sys.exc_info()[1].response.status_code,
                 details['wait'])
 
   # 
@@ -55,7 +58,8 @@ class Iterable(object):
   @backoff.on_exception(backoff.expo,
                         requests.exceptions.HTTPError,
                         on_backoff=retry_handler,
-                        max_tries=10)
+                        max_tries=10,
+                        giveup=fatal_code)
   def _get(self, path, stream=True, **kwargs):
     uri = "{uri}{path}".format(uri=self.uri, path=path)
     
