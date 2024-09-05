@@ -246,7 +246,7 @@ class EmailSendSkip(Stream):
 class EmailSubscribe(Stream):
     name = "email_subscribe"
     replication_method = "INCREMENTAL"
-    key_properties = []
+    key_properties = [ "createdAt", "email" ]
     replication_key = "createdAt"
     data_type_name = "emailSubscribe"
 
@@ -257,9 +257,108 @@ class EmailSubscribe(Stream):
 class EmailUnsubscribe(Stream):
     name = "email_unsubscribe"
     replication_method = "INCREMENTAL"
-    key_properties = [ "messageId" ]
+    key_properties = [ "createdAt", "email" ]
     replication_key = "createdAt"
     data_type_name = "emailUnsubscribe"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class CustomEvent(Stream):
+    name = "custom_event"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "createdAt", "email" ]
+    replication_key = "createdAt"
+    data_type_name = "customEvent"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class SmsSend(Stream):
+    name = "sms_send"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "smsSend"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class SmsSendSkip(Stream):
+    name = "sms_send_skip"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "smsSendSkip"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class SmsClick(Stream):
+    name = "sms_click"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "smsClick"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class SmsBounce(Stream):
+    name = "sms_bounce"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "smsBounce"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class SmsReceived(Stream):
+    name = "sms_received"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "smsReceived"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class WebPushSend(Stream):
+    name = "web_push_send"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "webPushSend"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class WebPushSendSkip(Stream):
+    name = "web_push_send_skip"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "webPushSendSkip"
+
+    def sync(self, state):
+        return self.sync_data_export(state)
+
+
+class WebPushClick(Stream):
+    name = "web_push_click"
+    replication_method = "INCREMENTAL"
+    key_properties = [ "messageId" ]
+    replication_key = "createdAt"
+    data_type_name = "webPushClick"
 
     def sync(self, state):
         return self.sync_data_export(state)
@@ -292,6 +391,15 @@ STREAMS = {
     "email_send_skip": EmailSendSkip,
     "email_subscribe": EmailSubscribe,
     "email_unsubscribe": EmailUnsubscribe,
+    "custom_event": CustomEvent,
+    "sms_send": SmsSend,
+    "sms_send_skip": SmsSendSkip,
+    "sms_click": SmsClick,
+    "sms_bounce": SmsBounce,
+    "sms_received": SmsReceived,
+    "web_push_send": WebPushSend,
+    "web_push_send_skip": WebPushSendSkip,
+    "web_push_click": WebPushClick,
     "users": Users
 }
 
