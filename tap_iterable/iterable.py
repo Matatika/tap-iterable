@@ -15,12 +15,18 @@ import sys
 logger = logging.getLogger()
 
 
+REGION_API_BASE_URLS = {
+  "US": "https://api.iterable.com",
+  "EU": "https://api.eu.iterable.com",
+}
+
+
 """ Simple wrapper for Iterable. """
 class Iterable(object):
 
-  def __init__(self, api_key, start_date=None, api_window_in_days=30):
+  def __init__(self, api_key, start_date=None, api_window_in_days=30, region=None):
     self.api_key = api_key
-    self.uri = "https://api.iterable.com/api/"
+    self.uri = REGION_API_BASE_URLS.get(region, REGION_API_BASE_URLS["US"]) + "/api/"
     self.api_window_in_days = int(api_window_in_days)
     self.MAX_BYTES = 10240
     self.CHUNK_SIZE = 512
