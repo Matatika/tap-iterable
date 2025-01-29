@@ -97,7 +97,7 @@ def translate_to_schema(fields):
       schema["properties"][k_name]["properties"][k_value] = get_schema_datatype(v)
 
     else:
-      if v != "object":
+      if v not in {"object", "nested"}:
         schema['properties'][k] = get_schema_datatype(v)
 
   return schema
