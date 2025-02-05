@@ -10,6 +10,7 @@ import backoff
 import requests
 import logging
 import sys
+import math
 
 
 logger = logging.getLogger()
@@ -39,7 +40,7 @@ class Iterable(object):
   def _daterange(self, start_date, end_date):
     total_days = (utils.strptime_with_tz(end_date) - utils.strptime_with_tz(start_date)).days
     if total_days >= self.api_window_in_days:
-      for n in range(int(total_days / self.api_window_in_days)):
+      for n in range(math.ceil(total_days / self.api_window_in_days)):
         yield (utils.strptime_with_tz(start_date) + n * timedelta(int(self.api_window_in_days))).strftime("%Y-%m-%d %H:%M:%S")
     else:
       yield start_date
